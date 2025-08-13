@@ -16,6 +16,7 @@
 | **Framework**               | Next.js (App Router)           |
 | **CSS**                     | Tailwind CSS                   |
 | **UI/UX**                   | shadcn/ui                      |
+| **Animation**               | framer-motion                  |
 | **Validation**              | Zod                            |
 | **Form Handling**           | react-hook-form                |
 | **Data Fetching & Caching** | react-query                    |
@@ -65,6 +66,14 @@
 - 현대적 디자인을 즉시 적용 가능, UI 설계 시간 단축
 - 버튼, 모달, 드롭다운, 탭, 폼 필드 등 프로덕션 레벨 고품질 컴포넌트 제공
 - Tailwind Variants로 상태·사이즈·색상별 스타일 분리 → 유지보수성 강화
+
+---
+
+### **Animation: framer-motion**
+
+- React에 특화된 애니메이션 라이브러리
+- 단순한 페이드/슬라이드부터 복잡한 제스처 기반 인터렉션까지 구현 가능
+- 선언적 API로 애니메이션 로직을 간결하게 작성 가능
 
 ---
 
