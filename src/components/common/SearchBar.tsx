@@ -7,7 +7,7 @@ const SearchBar = React.forwardRef<
   React.ComponentProps<"input">
 >(({ className, type, ...props }, ref) => {
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <input
         ref={ref}
         type={type}
