@@ -1,9 +1,23 @@
+"use client";
+
 import NavigationBar from "@/components/common/NavigationBar";
 import { SearchBar } from "@/components/common/SearchBar";
 import { Badge } from "@/components/ui/Badge";
+import { favoritesList } from "@/features/stocks/mock/favorites.mock";
 import { Moon, Sun, UserRound } from "lucide-react";
+import { useTheme } from "next-themes";
 
+/**
+ * 메인 페이지
+ */
 export default function Home() {
+  const { theme, setTheme } = useTheme();
+
+  const onClickDarkMode = () => {
+    if (theme === "light") setTheme("dark");
+    else setTheme("light");
+  };
+
   return (
     <main className="h-full">
       <section>
@@ -12,10 +26,15 @@ export default function Home() {
           <NavigationBar
             showLeftButton
             leftButton={
-              <Sun className="size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <>
+                <Sun className="size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute size-6 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+              </>
             }
+            onClickLeftButton={onClickDarkMode}
             showRightButton
             rightButton={<UserRound className="size-6" />}
+            // onClickRightButton={() => setTheme("system")}
           />
         </div>
       </section>
@@ -27,63 +46,15 @@ export default function Home() {
 
           {/* favorites */}
           <div className="w-full flex flex-wrap gap-2">
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 애플"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 로켓랩"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 테슬라"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 구글"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 테슬라"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 구글"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 테슬라"}
-            </Badge>
-            <Badge
-              className="bg-blue-500 text-white dark:bg-blue-600"
-              variant="secondary"
-            >
-              {"# 구글"}
-            </Badge>
-            <Badge className="bg-emerald-500 text-white dark:bg-emerald-600">
-              # 애플
-            </Badge>
-            <Badge className="bg-amber-500 text-white dark:bg-amber-600">
-              # 로켓랩
-            </Badge>
-            <Badge className="bg-violet-500 text-white dark:bg-violet-600">
-              # 테슬라
-            </Badge>
+            {favoritesList.map((item) => (
+              <Badge
+                key={item.id}
+                className="bg-blue-500 text-white dark:bg-blue-600"
+                variant="secondary"
+              >
+                {`# ${item.title}`}
+              </Badge>
+            ))}
           </div>
         </div>
 
