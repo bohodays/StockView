@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StockView | 나만의 종목 분석 웹앱",
+  title: "StockView | 나만의 종목 분석 앱",
   description:
     "실시간 뉴스, 종목 분석, 수익 예측까지 한 번에! 주식 초보부터 고수까지 모두를 위한 스마트한 투자 도우미.",
   icons: {
