@@ -19,11 +19,14 @@ const NavigationBar = ({
   onClickRightButton,
 }: NavigationBarProps) => {
   return (
-    <div className="relative pt-[48px]">
-      <nav className="absolute top-0 w-full flex items-center justify-between h-12 px-2">
+    <div className="relative">
+      <nav className="w-full flex items-center justify-between h-12 px-2">
         {showLeftButton ? (
           <Button
-            onClick={onClickLeftButton}
+            onClick={() => {
+              console.log("Button clicked");
+              onClickLeftButton?.();
+            }}
             variant={"ghost"}
             className="flex items-center justify-center"
             aria-label="Left Navigation Button"

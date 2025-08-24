@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { favoritesList } from "@/features/stocks/mock/favorites.mock";
 import { Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 /**
  * 메인 페이지
@@ -27,14 +28,17 @@ export default function Home() {
             showLeftButton
             leftButton={
               <>
-                <Sun className="size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <Moon className="absolute size-6 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <Moon className="size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90 " />
+                <Sun className="absolute size-6  scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
               </>
             }
             onClickLeftButton={onClickDarkMode}
             showRightButton
-            rightButton={<UserRound className="size-6" />}
-            // onClickRightButton={() => setTheme("system")}
+            rightButton={
+              <Link href={"/login"}>
+                <UserRound className="size-6" />
+              </Link>
+            }
           />
         </div>
       </section>
