@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { signUpWithEmail } from "@/lib/api/auth";
 import { signupSchema, SignupSchema } from "@/lib/zod/signupSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const Page = () => {
   const {
@@ -19,9 +22,22 @@ const Page = () => {
   } = useForm<SignupSchema>({
     resolver: zodResolver(signupSchema),
   });
+  const router = useRouter();
 
-  const onSubmit = (data: SignupSchema) => {
-    console.log("회원가입 데이터", { data });
+  const onSubmit = async (data: SignupSchema) => {
+    const { nickname, email, password } = data;
+
+    const { error } = await signUpWithEmail(nickname, email, password);
+
+    if (error) {
+      if (error.code === "user_already_exists") {
+        toast.error("이미 가입된 이메일이에요.");
+      } else {
+        toast.error("문제가 발생했어요. 잠시 후 다시 시도해주세요.");
+      }
+    } else {
+      router.push("/login?signup=success");
+    }
   };
 
   return (
@@ -43,8 +59,21 @@ const Page = () => {
       <section className="min-h-screen w-4/5 mx-auto space-y-32 -translate-y-[var(--navigation-height)] flex flex-col justify-center items-center ">
         <Card className="w-full shadow-md">
           <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="nickname">닉네임</Label>
+                  <Input
+                    id="nickname"
+                    type="nickname"
+                    {...register("nickname")}
+                  />
+                  {errors.nickname && (
+                    <p className="text-sm text-red-500">
+                      {errors.nickname.message}
+                    </p>
+                  )}
+                </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">이메일</Label>
                   <Input
@@ -90,7 +119,7 @@ const Page = () => {
                   )}
                 </div>
               </div>
-              <CardFooter className="flex flex-col space-y-4 mt-6">
+              <CardFooter className="flex flex-col space-y-4 mt-6 px-0">
                 <Button full type="submit">
                   회원가입
                 </Button>

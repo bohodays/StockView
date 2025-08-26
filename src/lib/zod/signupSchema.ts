@@ -2,7 +2,14 @@ import { z } from "zod";
 
 export const signupSchema = z
   .object({
-    email: z.email("유효한 이메일 형식이 아닙니다."),
+    nickname: z
+      .string()
+      .min(1, "닉네임은 최소 1자 이상이어야 합니다.")
+      .max(16, "닉네임은 최대 16자까지 입력할 수 있습니다."),
+    email: z
+      .string()
+      .min(1, "이메일을 입력해주세요.")
+      .pipe(z.email("유효한 이메일 형식이 아닙니다.")),
     password: z
       .string()
       .min(6, "비밀번호는 최소 6자 이상이어야 합니다.")

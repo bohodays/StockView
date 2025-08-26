@@ -4,20 +4,39 @@ import NavigationBar from "@/components/common/NavigationBar";
 import { SearchBar } from "@/components/common/SearchBar";
 import { Badge } from "@/components/ui/Badge";
 import { favoritesList } from "@/features/stocks/mock/favorites.mock";
+import { useAuthStore } from "@/lib/stores/auth";
 import { Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 /**
  * 메인 페이지
  */
 export default function Home() {
   const { theme, setTheme } = useTheme();
+  const searchParams = useSearchParams();
+  const loginStatus = searchParams.get("login");
+  const { isLogined } = useAuthStore();
 
   const onClickDarkMode = () => {
     if (theme === "light") setTheme("dark");
     else setTheme("light");
   };
+
+  useEffect(() => {
+    console.log({ isLogined });
+
+    if (loginStatus === "success") {
+      toast.success("로그인에 성공했습니다.");
+
+      // URL에서 ?login=success 제거
+      const newUrl = window.location.pathname;
+      window.history.replaceState(null, "", newUrl);
+    }
+  }, [loginStatus]);
 
   return (
     <main className="h-full">
@@ -35,7 +54,7 @@ export default function Home() {
             onClickLeftButton={onClickDarkMode}
             showRightButton
             rightButton={
-              <Link href={"/login"}>
+              <Link href={isLogined ? "/my" : "/login"}>
                 <UserRound className="size-6" />
               </Link>
             }
