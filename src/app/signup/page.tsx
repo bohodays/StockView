@@ -56,7 +56,7 @@ const Page = () => {
       </section>
 
       {/* signup form */}
-      <section className="min-h-screen w-4/5 mx-auto space-y-32 -translate-y-[var(--navigation-height)] flex flex-col justify-center items-center ">
+      <section className="min-h-[100dvh] w-4/5 mx-auto space-y-32 py-[var(--navigation-height)] flex flex-col justify-center items-center ">
         <Card className="w-full shadow-md">
           <CardContent>
             <form noValidate onSubmit={handleSubmit(onSubmit)}>

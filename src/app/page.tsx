@@ -48,7 +48,7 @@ export default function Home() {
             leftButton={
               <>
                 <Moon className="size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90 " />
-                <Sun className="absolute size-6  scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <Sun className="absolute size-6 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
               </>
             }
             onClickLeftButton={onClickDarkMode}
@@ -62,7 +62,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="min-h-screen w-4/5 mx-auto space-y-32 -translate-y-[var(--navigation-height)] flex flex-col justify-center items-center">
+      <section className="min-h-[100dvh] w-4/5 mx-auto space-y-32 py-[var(--navigation-height)] flex flex-col justify-center items-center">
         <div className="w-full space-y-3">
           {/* search bar */}
           <SearchBar className="" />
