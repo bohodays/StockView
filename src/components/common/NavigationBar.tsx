@@ -20,7 +20,11 @@ const NavigationBar = ({
 }: NavigationBarProps) => {
   return (
     <div className="relative">
-      <nav className="w-full flex items-center justify-between h-12 px-2">
+      <nav
+        role="navigation"
+        aria-label="Main"
+        className="absolute top-0 w-full flex items-center justify-between h-12 px-2"
+      >
         {showLeftButton ? (
           <Button
             onClick={() => {
