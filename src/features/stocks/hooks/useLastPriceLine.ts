@@ -80,6 +80,7 @@ const useLastPriceLine = (symbol: string, maxPoints = 600) => {
 
     const off = ws.onMessage((msg) => {
       if (msg?.type === "last" && Array.isArray(msg.data)) {
+        console.log("훅", { symbol });
         const trades = msg.data.filter((d: any) => d.s === symbol);
         if (!trades.length) return;
 
@@ -96,6 +97,7 @@ const useLastPriceLine = (symbol: string, maxPoints = 600) => {
       // 혹시 서버가 trade만 주는 경우(백업): 가장 마지막 trade를 최신가로 사용
       if (msg?.type === "trade" && Array.isArray(msg.data)) {
         const trades = msg.data.filter((d: any) => d.s === symbol);
+        console.log("훅", { symbol });
         if (!trades.length) return;
 
         // 마지막 체결

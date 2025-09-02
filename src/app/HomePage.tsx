@@ -5,19 +5,38 @@ import { SearchBar } from "@/components/common/SearchBar";
 import { Badge } from "@/components/ui/Badge";
 import { favoritesList } from "@/features/stocks/mock/favorites.mock";
 import { useAuthStore } from "@/lib/stores/auth";
+import { SearchSchema, searchSchema } from "@/lib/zod/searchSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
   const { theme, setTheme } = useTheme();
   const { isLogined } = useAuthStore();
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SearchSchema>({
+    resolver: zodResolver(searchSchema),
+  });
 
   const onClickDarkMode = () => {
     if (theme === "light") setTheme("dark");
     else setTheme("light");
+  };
+
+  const onSubmit = async (data: SearchSchema) => {
+    const { searchValue } = data;
+    if (searchValue) {
+      router.push(`/stock/${searchValue.toUpperCase()}`);
+    }
   };
 
   useEffect(() => {
@@ -31,6 +50,12 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
       window.history.replaceState(null, "", newUrl);
     }
   }, [loginStatus]);
+
+  useEffect(() => {
+    if (errors.searchValue?.type === "too_small") {
+      toast.error(errors.searchValue.message);
+    }
+  }, [errors]);
 
   return (
     <main className="h-full">
@@ -59,7 +84,14 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
       <section className="min-h-[100dvh] w-4/5 mx-auto space-y-32 py-[var(--navigation-height)] flex flex-col justify-center items-center">
         <div className="w-full space-y-3">
           {/* search bar */}
-          <SearchBar className="" />
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <SearchBar
+              className=""
+              id="searchValue"
+              placeholder="검색할 코인을 입력해주세요."
+              {...register("searchValue")}
+            />
+          </form>
 
           {/* favorites */}
           <div className="w-full flex flex-wrap gap-2">

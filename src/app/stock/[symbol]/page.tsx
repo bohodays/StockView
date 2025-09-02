@@ -7,6 +7,8 @@ export const dynamic = "force-dynamic";
 const Page = async ({ params }: { params: { symbol: string } }) => {
   const { symbol } = await params;
 
+  console.log("페이지", { symbol });
+
   return <StockDetailClient symbol={`BINANCE:${symbol}USDT`} />;
 };
 

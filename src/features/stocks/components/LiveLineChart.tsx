@@ -10,7 +10,10 @@ import {
   CrosshairMode,
   ColorType,
   UTCTimestamp,
+  Time,
+  TickMarkType,
 } from "lightweight-charts";
+import dayjs from "dayjs";
 
 export default function LiveLineChart({
   symbol,
@@ -25,7 +28,7 @@ export default function LiveLineChart({
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Line"> | null>(null);
 
-  console.log(points);
+  console.log({ symbol });
 
   useEffect(() => {
     if (!hostRef.current) return;
@@ -40,13 +43,34 @@ export default function LiveLineChart({
         borderVisible: false,
         timeVisible: true,
         secondsVisible: false,
+        tickMarkFormatter: (
+          time: Time,
+          tickMarkType: TickMarkType,
+          local: string
+        ) => {
+          return dayjs
+            .unix(Number(time))
+            .tz("Asia/Seoul")
+            .format("MM-DD HH:mm");
+        },
       },
       grid: { vertLines: { visible: false }, horzLines: { visible: false } },
       crosshair: { mode: CrosshairMode.Normal },
     });
     chartRef.current = chart;
 
-    const series = chart.addSeries(LineSeries, { priceLineVisible: false });
+    const series = chart.addSeries(LineSeries, {
+      priceLineVisible: false,
+      priceFormat: {
+        type: "custom",
+        formatter: (price: number) => {
+          // 반드시 문자열을 return 해야 함!
+          return new Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 2,
+          }).format(price);
+        },
+      },
+    });
     seriesRef.current = series;
 
     const resize = () => {
@@ -72,9 +96,6 @@ export default function LiveLineChart({
 
   return (
     <div>
-      <div className="mb-2 text-sm text-muted-foreground">
-        {symbol} (Last Price • Live)
-      </div>
       <div ref={hostRef} className="w-full" />
     </div>
   );
