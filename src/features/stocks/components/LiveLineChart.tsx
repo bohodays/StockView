@@ -28,8 +28,6 @@ export default function LiveLineChart({
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Line"> | null>(null);
 
-  console.log({ symbol });
-
   useEffect(() => {
     if (!hostRef.current) return;
 
