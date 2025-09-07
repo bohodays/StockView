@@ -75,8 +75,7 @@ const LoginPage = ({ signupSuccess }: { signupSuccess?: string }) => {
               // </Link>
             }
             onClickLeftButton={() => {
-              alert("tt");
-              console.log("clicked");
+              router.push("/");
             }}
           />
         </div>
