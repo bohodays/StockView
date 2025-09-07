@@ -3,7 +3,7 @@
 import { getQuote } from "@/lib/api/finnhub";
 import { FinnhubWS } from "@/lib/api/ws-client";
 import { stockKeys } from "@/lib/query/keys";
-import { formatFinnhubTime, toSec } from "@/lib/utils/utils";
+import { toSec } from "@/lib/utils/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UTCTimestamp } from "lightweight-charts";
 import { useEffect, useRef } from "react";
@@ -55,7 +55,7 @@ const useLastPriceLine = (symbol: string, maxPoints = 600) => {
       if (pending) {
         qc.setQueryData<LinePoint[]>(
           stockKeys.lastLine(symbol),
-          (prev: any = []) => {
+          (prev = []) => {
             const next = prev.slice();
             const point = pending!;
 
