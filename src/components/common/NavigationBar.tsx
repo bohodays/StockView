@@ -8,6 +8,9 @@ export interface NavigationBarProps {
   showRightButton?: boolean;
   rightButton?: React.ReactNode;
   onClickRightButton?: () => void;
+  showCenterButton?: boolean;
+  centerButton?: React.ReactNode;
+  onClickCenterButton?: () => void;
 }
 
 const NavigationBar = ({
@@ -17,6 +20,9 @@ const NavigationBar = ({
   showRightButton,
   rightButton,
   onClickRightButton,
+  showCenterButton,
+  centerButton,
+  onClickCenterButton,
 }: NavigationBarProps) => {
   return (
     <div className="relative">
@@ -28,7 +34,6 @@ const NavigationBar = ({
         {showLeftButton ? (
           <Button
             onClick={() => {
-              console.log("Button clicked");
               onClickLeftButton?.();
             }}
             variant={"ghost"}
@@ -39,6 +44,21 @@ const NavigationBar = ({
           </Button>
         ) : (
           <div /> // 빈 공간을 차지해서 균형 유지
+        )}
+
+        {showCenterButton ? (
+          <Button
+            onClick={() => {
+              onClickCenterButton?.();
+            }}
+            variant={"ghost"}
+            className="flex items-center justify-center px-0"
+            aria-label="Left Navigation Button"
+          >
+            {centerButton}
+          </Button>
+        ) : (
+          <div />
         )}
 
         {showRightButton ? (
