@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import useCryptoSymbols from "@/features/stocks/hooks/useCryptoSymbols";
 import { favoritesList } from "@/features/stocks/mock/favorites.mock";
 import { CryptoSymbolType } from "@/features/stocks/types/symbol";
@@ -140,24 +141,34 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
 
         {/* 코인 목록 */}
         <section className="w-4/5 mx-auto space-y-32 py-6 flex flex-col justify-center items-center">
-          <div>
-            {symbolList?.map(
-              ({ symbol, displaySymbol, description }, index) => (
-                <Fragment key={`${symbol}-${index}`}>
-                  <Button
-                    variant={"ghost"}
-                    full
-                    className="justify-between"
-                    onClick={() => onClickSymbol({ symbol })}
-                  >
-                    <div>{displaySymbol}</div>
-                    <div>{description}</div>
-                  </Button>
-                  {index !== symbolList.length && <Separator />}
-                </Fragment>
-              )
-            )}
-          </div>
+          {isLoading ? (
+            <div className="w-full space-y-4">
+              {Array(30)
+                .fill(undefined)
+                .map((_, index) => (
+                  <Skeleton key={`skeleton-${index}`} className="h-7 w-full" />
+                ))}
+            </div>
+          ) : (
+            <div>
+              {symbolList?.map(
+                ({ symbol, displaySymbol, description }, index) => (
+                  <Fragment key={`${symbol}-${index}`}>
+                    <Button
+                      variant={"ghost"}
+                      full
+                      className="justify-between"
+                      onClick={() => onClickSymbol({ symbol })}
+                    >
+                      <div>{displaySymbol}</div>
+                      <div>{description}</div>
+                    </Button>
+                    {index !== symbolList.length && <Separator />}
+                  </Fragment>
+                )
+              )}
+            </div>
+          )}
         </section>
       </ScrollArea>
     </main>
