@@ -10,26 +10,23 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useCryptoSymbols from "@/features/stocks/hooks/useCryptoSymbols";
 import { favoritesList } from "@/features/stocks/mock/favorites.mock";
 import { CryptoSymbolType } from "@/features/stocks/types/symbol";
+import { getFavorites } from "@/lib/api/favorite";
 import { useAuthStore } from "@/lib/stores/auth";
+import { formatSymbol } from "@/lib/utils/utils";
 import { SearchSchema, searchSchema } from "@/lib/zod/searchSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
   const { theme, setTheme } = useTheme();
   const { isLogined } = useAuthStore();
-  const {
-    data: symbolList,
-    isLoading,
-    error,
-    refetch,
-  } = useCryptoSymbols("BINANCE");
+  const { data: symbolList, isLoading } = useCryptoSymbols("BINANCE");
   const router = useRouter();
   const {
     register,
@@ -38,6 +35,9 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
   } = useForm<SearchSchema>({
     resolver: zodResolver(searchSchema),
   });
+  const [favoriteList, setFavoriteList] = useState<
+    { symbol: string; displayNm: string }[]
+  >([]);
 
   /**
    * 다크모드 버튼 클릭 이벤트 핸들러
@@ -74,8 +74,37 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
     }
   };
 
+  /**
+   * 사용자가 즐겨찾기한 코인 목록을 가져오는 함수
+   */
+  const fetchFavoritesList = async () => {
+    const favoriteList = await getFavorites();
+    if (favoriteList.length) {
+      const formattedFavoriteList = favoriteList.map((item) => ({
+        symbol: item.symbol,
+        displayNm: formatSymbol(item.symbol),
+      }));
+      setFavoriteList(formattedFavoriteList);
+    }
+  };
+
+  /**
+   * 사용자가 즐겨찾기한 코인 Badge 클릭 event handler
+   */
+  const onClickFavoriteBadge = (item: {
+    symbol: string;
+    displayNm: string;
+  }) => {
+    router.push(`/stock/${encodeURIComponent(item.symbol.toUpperCase())}`);
+  };
+
   useEffect(() => {
     console.log({ isLogined });
+
+    // 로그인 되어있으면 즐겨찾기 목록 요청
+    if (isLogined) {
+      fetchFavoritesList();
+    }
 
     if (loginStatus === "success") {
       toast.success("로그인에 성공했습니다.");
@@ -126,13 +155,14 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
             </form>
 
             <div className="w-full flex flex-wrap gap-2">
-              {favoritesList.map((item) => (
+              {favoriteList.map((item, index) => (
                 <Badge
-                  key={item.id}
+                  key={`favorite-${item.symbol}-${index}`}
                   className="bg-blue-500 text-white dark:bg-blue-600"
                   variant="secondary"
+                  onClick={() => onClickFavoriteBadge(item)}
                 >
-                  {`# ${item.title}`}
+                  {`# ${item.displayNm}`}
                 </Badge>
               ))}
             </div>

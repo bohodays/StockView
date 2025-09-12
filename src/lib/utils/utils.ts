@@ -20,5 +20,16 @@ export function formatFinnhubTime(t: number): string {
   return dayjs.unix(t).tz("Asia/Seoul").format("YYYY-MM-DD HH:mm:ss");
 }
 
-// 공용 헬퍼
+/**
+ * 공용헬퍼
+ */
 export const toSec = (ms: number) => Math.floor(ms / 1000) as UTCTimestamp;
+
+/**
+ * symbol의 format을 맞추어 사용자에게 보여주기 위한 유틸 함수
+ * ex) "BINANCE:BTCUSDT" -> "BTC"
+ */
+export const formatSymbol = (symbol: string) => {
+  const splittedSymbol = symbol.split(":")[1].replace("USDT", "");
+  return splittedSymbol;
+};
