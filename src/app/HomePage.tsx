@@ -181,8 +181,9 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
             </div>
           ) : (
             <div>
-              {symbolList?.map(
-                ({ symbol, displaySymbol, description }, index) => (
+              {symbolList
+                ?.filter((item) => item.symbol.includes("USDT"))
+                ?.map(({ symbol, displaySymbol, description }, index) => (
                   <Fragment key={`${symbol}-${index}`}>
                     <Button
                       variant={"ghost"}
@@ -195,8 +196,7 @@ const HomePage = ({ loginStatus }: { loginStatus?: string }) => {
                     </Button>
                     {index !== symbolList.length && <Separator />}
                   </Fragment>
-                )
-              )}
+                ))}
             </div>
           )}
         </section>
